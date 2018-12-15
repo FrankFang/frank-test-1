@@ -3,6 +3,7 @@
   "version": "0.0.4",
   "main": "dist/gulu.umd.min.js",
   "scripts": {
+    "start": "vue-cli-service serve",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --target lib --name gulu src/index.js",
     "test": "cross-env BABEL_ENV=test karma start --single-run",

@@ -25,7 +25,6 @@
         contentY: 0,
         barHeight: undefined,
         parentHeight: undefined,
-        childHeight: undefined,
         mouseIn: false,
       }
     },
@@ -35,15 +34,39 @@
     mounted () {
       this.listenToDocument()
       this.parentHeight = this.$refs.parent.getBoundingClientRect().height
-      this.childHeight = this.$refs.child.getBoundingClientRect().height
       this.updateScrollBar()
+      this.listenToRemoteResources()
+      this.listenToDomChange()
     },
     computed: {
       maxScrollHeight () {
         return this.parentHeight - this.barHeight
-      }
+      },
+      childHeight () { // 可以优化
+        return this.$refs.child.getBoundingClientRect().height
+      },
     },
+
     methods: {
+      listenToRemoteResources () {
+        let tags = this.$refs.parent.querySelectorAll('img, video, audio')
+        Array.from(tags).map((tag) => {
+          if (tag.hasAttribute('data-gulu-listened')) { return }
+          tag.setAttribute('data-gulu-listened', 'yes')
+          tag.addEventListener('load', () => {
+            this.updateScrollBar()
+          })
+        })
+      },
+      listenToDomChange () {
+        const targetNode = this.$refs.child
+        const config = {attributes: true, childList: true, subtree: true};
+        const callback = () => {
+          this.listenToRemoteResources()
+        }
+        const observer = new MutationObserver(callback);
+        observer.observe(targetNode, config);
+      },
       listenToDocument () {
         document.addEventListener('mousemove', e => this.onMouseMoveScrollbar(e))
         document.addEventListener('mouseup', e => this.onMouseUpScrollbar(e))

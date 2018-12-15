@@ -15,7 +15,7 @@
     <!--</div>-->
 
     <g-scroll style="width: 300px; height: 400px;">
-      <p>123456789_10_11_12_13_14_15_16_17_189</p>
+      <p id="test2">123456789_10_11_12_13_14_15_16_17_189</p>
       <p>2</p>
       <p>3</p>
       <p>4</p>
@@ -25,6 +25,7 @@
       <p>8</p>
       <p>9</p>
       <p>10</p>
+      <img src="https://www.guidedogs.org/wp-content/uploads/2017/07/2O17-8819-purple-2-min-400x400.jpg" alt="">
       <p>11</p>
       <p>12</p>
       <p>13</p>
@@ -196,6 +197,13 @@
       }
     },
     mounted () {
+      setTimeout(() => {
+        let img = document.createElement('img')
+        img.src = 'https://developer.mozilla.org/static/browsers/samsung-internet.8faa2ee1b8a1.svg'
+        img.height = 1000
+        window.test2.appendChild(img)
+      }, 10000)
+
       let test = document.querySelector('#test')
       let startPosition
       let endPosition

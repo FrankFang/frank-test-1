@@ -1,7 +1,7 @@
 <template>
   <div class="popover" ref="popover">
-    <div ref="contentWrapper" class="content-wrapper" v-if="visible"
-      :class="{[`position-${position}`]:true}">
+    <div ref="contentWrapper" class="gulu-popover-content-wrapper" v-if="visible"
+      :class="[{[`position-${position}`]:true}, popClassName]">
       <slot name="content" :close="close"></slot>
     </div>
     <span ref="triggerWrapper" style="display: inline-block;">
@@ -14,6 +14,9 @@
   export default {
     name: "GuluPopover",
     props: {
+      popClassName: {
+        type: String
+      },
       position: {
         type: String,
         default: 'top',
@@ -27,6 +30,9 @@
         validator (value) {
           return ['click', 'hover'].indexOf(value) >= 0
         }
+      },
+      container: {
+        type: Element
       }
     },
     data () {
@@ -58,7 +64,7 @@
       }
     },
     methods: {
-      addPopoverListeners(){
+      addPopoverListeners () {
         if (this.trigger === 'click') {
           this.$refs.popover.addEventListener('click', this.onClick)
         } else {
@@ -66,7 +72,7 @@
           this.$refs.popover.addEventListener('mouseleave', this.close)
         }
       },
-      removePopoverListeners(){
+      removePopoverListeners () {
         if (this.trigger === 'click') {
           this.$refs.popover.removeEventListener('click', this.onClick)
         } else {
@@ -74,14 +80,14 @@
           this.$refs.popover.removeEventListener('mouseleave', this.close)
         }
       },
-      putBackContent(){
+      putBackContent () {
         const {contentWrapper, popover} = this.$refs
-        if(!contentWrapper){return}
+        if (!contentWrapper) {return}
         popover.appendChild(contentWrapper)
       },
       positionContent () {
-        const {contentWrapper, triggerWrapper} = this.$refs
-        document.body.appendChild(contentWrapper)
+        const {contentWrapper, triggerWrapper} = this.$refs;
+        (this.container || document.body).appendChild(contentWrapper)
         const {width, height, top, left} = triggerWrapper.getBoundingClientRect()
         const {height: height2} = contentWrapper.getBoundingClientRect()
         let positions = {
@@ -96,6 +102,7 @@
             left: left + window.scrollX + width
           },
         }
+        console.log(positions[this.position].left)
         contentWrapper.style.left = positions[this.position].left + 'px'
         contentWrapper.style.top = positions[this.position].top + 'px'
 
@@ -141,7 +148,7 @@
     vertical-align: top;
     position: relative;
   }
-  .content-wrapper {
+  .gulu-popover-content-wrapper {
     position: absolute;
     border: 1px solid $border-color;
     border-radius: $border-radius;

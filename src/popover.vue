@@ -102,7 +102,6 @@
             left: left + window.scrollX + width
           },
         }
-        console.log(positions[this.position].left)
         contentWrapper.style.left = positions[this.position].left + 'px'
         contentWrapper.style.top = positions[this.position].top + 'px'
 
@@ -118,6 +117,7 @@
       },
       open () {
         this.visible = true
+        this.$emit('open')
         this.$nextTick(() => {
           this.positionContent()
           document.addEventListener('click', this.onClickDocument)
@@ -125,6 +125,7 @@
       },
       close () {
         this.visible = false
+        this.$emit('close')
         document.removeEventListener('click', this.onClickDocument)
       },
       onClick (event) {
@@ -155,7 +156,6 @@
     filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.5));
     background: white;
     padding: .5em 1em;
-    max-width: 20em;
     word-break: break-all;
     &::before, &::after {
       content: '';

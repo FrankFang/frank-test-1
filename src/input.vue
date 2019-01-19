@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper" :class="{error}">
-    <input :value="value" type="text" :disabled="disabled" :readonly="readonly"
+    <input ref="input" :value="value" type="text" :disabled="disabled" :readonly="readonly"
       @change="$emit('change', $event.target.value)"
       @input="$emit('input', $event.target.value)"
       @focus="$emit('focus', $event.target.value)"
@@ -20,7 +20,7 @@
     name: 'GuluInput',
     props: {
       value: {
-        type: String
+        type: [String, Date]
       },
       disabled: {
         type: Boolean,
@@ -32,6 +32,11 @@
       },
       error: {
         type: String
+      }
+    },
+    methods:{
+      setRawValue(value){
+        this.$refs.input.value = value
       }
     }
   }
